@@ -24,7 +24,6 @@
     if (isGenerating) return;
     isGenerating = true;
 
-    alert('setLoadingFavicon called! Drawing red X');
 
     // Save original favicon if not already saved
     if (!originalFavicon) {
@@ -39,7 +38,6 @@
     const img = new Image();
     img.crossOrigin = 'anonymous';
     img.onload = function () {
-      alert('Favicon image loaded successfully!');
       // Draw original favicon
       ctx.drawImage(img, 0, 0, 32, 32);
 
@@ -62,7 +60,6 @@
       updateFavicon(canvas.toDataURL());
     };
     img.onerror = function () {
-      alert('Favicon image failed to load! Drawing red X on solid background.');
       // If can't load favicon, draw red X on solid background
       ctx.fillStyle = '#000000';
       ctx.fillRect(0, 0, 32, 32);
@@ -171,7 +168,7 @@
       clearInterval(faviconCheckInterval);
     }
 
-    // Use interval as backup
+    // Use interval as backup - less frequent to reduce performance impact
     faviconCheckInterval = setInterval(() => {
       const currentLink = document.querySelector("link[rel*='icon']");
 
@@ -180,44 +177,37 @@
         console.log('Favicon was changed! Restoring...');
         forceFaviconUpdate();
       }
-    }, 100); // Check every 100ms
+    }, 500); // Check every 500ms instead of 100ms
 
-    // Also use MutationObserver to catch changes immediately
+    // Also use MutationObserver only on head element (not subtree)
     const headObserver = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        // Check if favicon links were added or modified
-        mutation.addedNodes.forEach((node) => {
-          if (node.nodeName === 'LINK' && node.rel && node.rel.includes('icon')) {
-            if (node.href !== currentFaviconData) {
-              console.log('New favicon link detected, replacing...');
-              node.remove();
-              forceFaviconUpdate();
+      for (const mutation of mutations) {
+        // Only check direct children of head
+        if (mutation.type === 'childList') {
+          mutation.addedNodes.forEach((node) => {
+            if (node.nodeName === 'LINK' && node.rel && node.rel.includes('icon')) {
+              if (node.href !== currentFaviconData) {
+                console.log('New favicon link detected, replacing...');
+                setTimeout(() => {
+                  node.remove();
+                  forceFaviconUpdate();
+                }, 0);
+              }
             }
-          }
-        });
-
-        // Check if our favicon was removed
-        mutation.removedNodes.forEach((node) => {
-          if (node.nodeName === 'LINK' && node.rel && node.rel.includes('icon')) {
-            console.log('Favicon removed, restoring...');
-            forceFaviconUpdate();
-          }
-        });
-
-        // Check for attribute changes on favicon links
-        if (mutation.type === 'attributes' && mutation.target.nodeName === 'LINK' &&
-            mutation.target.rel && mutation.target.rel.includes('icon')) {
+          });
+        } else if (mutation.type === 'attributes' && mutation.target.nodeName === 'LINK' &&
+          mutation.target.rel && mutation.target.rel.includes('icon')) {
           if (mutation.target.href !== currentFaviconData) {
             console.log('Favicon href changed, restoring...');
             mutation.target.href = currentFaviconData;
           }
         }
-      });
+      }
     });
 
     headObserver.observe(document.head, {
       childList: true,
-      subtree: true,
+      subtree: false,  // Only watch direct children, not all descendants
       attributes: true,
       attributeFilter: ['href']
     });
@@ -258,11 +248,13 @@
       const loadingShimmers = document.querySelectorAll('span.loading-shimmer');
       const imageGenerationActive = loadingShimmers.length > 0;
 
+      console.log('Checking for shimmer... Found:', loadingShimmers.length, 'isGenerating:', isGenerating);
+
       if (imageGenerationActive && !isGenerating) {
-        alert('Loading shimmer detected! Showing red X.');
+        console.log('Loading shimmer detected! Showing red X.');
         setLoadingFavicon();
       } else if (!imageGenerationActive && isGenerating) {
-        alert('Loading shimmer gone! Showing green checkmark.');
+        console.log('Loading shimmer gone! Showing green checkmark.');
         setCompletedFavicon();
       }
     });
