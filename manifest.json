@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "ChatGptImageCreationLoadingCircle",
+  "description": "Show a loading circle on a tab icon for chatgpt when generating an image.",
+  "_unused_name": "CompetingMarkets",
+  "_unused_description": "CompetingMarkets allows you to create and compete in markets.",
+  "version": "1.0",
+  "icons": {
+    "16": "image.png",
+    "32": "image.png",
+    "48": "image.png",
+    "128": "image.png"
+  },
+  "content_scripts": [
+    {
+      "js": ["scripts/content.js"],
+      "matches": ["http://*/*", "https://*/*"]
+    }
+  ]
+}
