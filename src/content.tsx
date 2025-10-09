@@ -30,7 +30,23 @@ function processExistingTweets(): void {
 
       // Render React component into the div
       const root = createRoot(reactDiv);
-      root.render(<BettingForm />);
+
+      // Create a function to re-render with updated hover state
+      const renderWithHoverState = (isHovering: boolean) => {
+        root.render(<BettingForm isHovering={isHovering} />);
+      };
+
+      // Initial render with hover state false
+      renderWithHoverState(false);
+
+      // Add hover listeners to the tweet element
+      tweet.addEventListener("mouseenter", () => {
+        renderWithHoverState(true);
+      });
+
+      tweet.addEventListener("mouseleave", () => {
+        renderWithHoverState(false);
+      });
     });
 }
 

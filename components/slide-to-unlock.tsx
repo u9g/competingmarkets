@@ -70,13 +70,16 @@ export function SlideToUnlock({
 
     const trackWidth = trackRef.current?.offsetWidth || 0;
     const maxX = trackWidth - handleWidth;
+    const threshold = maxX * 0.8; // Unlock at 80% of the way
 
-    if (x.get() >= maxX) {
+    if (x.get() >= threshold) {
+      // Animate to the end position and stay there
+      animate(x, maxX, { type: "spring", bounce: 0, duration: 0.25 });
       onUnlock?.();
     } else {
       animate(x, 0, { type: "spring", bounce: 0, duration: 0.25 });
     }
-  }, [x, onUnlock, handleWidth]);
+  }, [x, onUnlock, handleWidth, trackRef]);
 
   return (
     <SlideToUnlockContext.Provider
