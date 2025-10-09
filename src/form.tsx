@@ -14,6 +14,13 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import {
+  SlideToUnlock,
+  SlideToUnlockHandle,
+  SlideToUnlockText,
+  SlideToUnlockTrack,
+} from "@/components/slide-to-unlock";
+import { ShimmeringText } from "@/components/shimmering-text";
 
 export function BettingForm() {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -209,14 +216,27 @@ export function BettingForm() {
                 </div>
               </div>
 
-              {/* Submit Button */}
-              <Button
-                type="submit"
-                size="lg"
-                className="w-full text-lg font-semibold"
-              >
-                Go
-              </Button>
+              {/* Submit Slider */}
+              <div className="flex justify-center">
+                <SlideToUnlock
+                  onUnlock={() => {
+                    handleSubmit({
+                      preventDefault: () => {},
+                    } as React.FormEvent);
+                  }}
+                  className="w-full max-w-md bg-zinc-900 ring-white/10"
+                >
+                  <SlideToUnlockTrack>
+                    <SlideToUnlockText className="text-white">
+                      <ShimmeringText
+                        text="Slide to submit"
+                        className="[--color:var(--color-zinc-400)] [--shimmering-color:var(--color-zinc-50)]"
+                      />
+                    </SlideToUnlockText>
+                    <SlideToUnlockHandle className="bg-green-600 hover:bg-green-700 text-white" />
+                  </SlideToUnlockTrack>
+                </SlideToUnlock>
+              </div>
             </form>
           </CardContent>
         </>
