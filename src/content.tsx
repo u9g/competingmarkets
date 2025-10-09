@@ -19,6 +19,23 @@ function processExistingTweets(): void {
         }
       }
 
+      // grok btn manip
+      const grokBtn = tweet.querySelector<HTMLButtonElement>(
+        'button[aria-label="Grok actions"]'
+      );
+      if (!grokBtn) return;
+
+      const grokBtnEl = grokBtn.parentElement as HTMLElement;
+
+      const parent = grokBtnEl.parentElement;
+      if (!parent) return;
+
+      const grokBtnClone = grokBtnEl.cloneNode(true) as HTMLElement; // <- tell TS it's an element
+      parent.insertBefore(grokBtnClone, grokBtnEl);
+
+      grokBtnClone.querySelector("svg")?.replaceWith("Make a bet");
+      // grok btn manip
+
       const reactDiv = document.createElement("div");
       reactDiv.setAttribute("data-vote-component", "true");
 
