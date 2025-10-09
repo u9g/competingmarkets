@@ -1,6 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import VoteComponent from "./VoteComponent";
+import { BettingForm } from "./form";
+import "../app/globals.css";
 
 function processExistingTweets(): void {
   document
@@ -22,7 +23,7 @@ function processExistingTweets(): void {
 
       // Render React component into the div
       const root = createRoot(reactDiv);
-      root.render(<VoteComponent />);
+      root.render(<BettingForm />);
     });
 }
 
