@@ -16,6 +16,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 
 export function BettingForm() {
+  const [isExpanded, setIsExpanded] = useState(false);
   const [betDescription, setBetDescription] = useState("");
   const [betterPays, setBetterPays] = useState("10");
   const [takerPays, setTakerPays] = useState("10");
@@ -76,115 +77,150 @@ export function BettingForm() {
 
   return (
     <Card className="w-full max-w-2xl">
-      <CardHeader>
-        <CardTitle className="text-3xl font-bold text-balance">
-          Create a Bet
-        </CardTitle>
-        <CardDescription className="text-muted-foreground">
-          Set up your bet and define the stakes for both parties
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Step 1: Bet Description */}
-          <div className="space-y-2">
-            <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded bg-muted text-sm font-semibold">
-                1
-              </div>
-              <Label
-                htmlFor="bet-description"
-                className="text-lg font-semibold"
-              >
-                What's the bet?
-              </Label>
-            </div>
-            <Textarea
-              id="bet-description"
-              placeholder="Describe the bet (e.g., Lakers will win the championship)"
-              value={betDescription}
-              onChange={(e) => setBetDescription(e.target.value)}
-              className="min-h-[100px] resize-none"
-              required
-            />
-          </div>
-
-          {/* Step 2: Payment Amounts */}
-          <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded bg-muted text-sm font-semibold">
-                2
-              </div>
-              <Label className="text-lg font-semibold">Set the stakes</Label>
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-2">
-              {/* Better Pays */}
-              <div className="space-y-2">
-                <Label htmlFor="better-pays" className="text-sm font-medium">
-                  Better pays
-                </Label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                    $
-                  </span>
-                  <Input
-                    id="better-pays"
-                    type="number"
-                    min="10"
-                    step="0.01"
-                    value={betterPays}
-                    onChange={(e) => handleBetterPaysChange(e.target.value)}
-                    className="pl-7"
-                    required
-                  />
-                </div>
-                {errors.betterPays && (
-                  <p className="text-sm text-destructive">
-                    {errors.betterPays}
-                  </p>
-                )}
-                <p className="text-xs text-muted-foreground">Minimum: $10.00</p>
-              </div>
-
-              {/* Taker Pays */}
-              <div className="space-y-2">
-                <Label htmlFor="taker-pays" className="text-sm font-medium">
-                  Taker pays
-                </Label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                    $
-                  </span>
-                  <Input
-                    id="taker-pays"
-                    type="number"
-                    min="10"
-                    step="0.01"
-                    value={takerPays}
-                    onChange={(e) => handleTakerPaysChange(e.target.value)}
-                    className="pl-7"
-                    required
-                  />
-                </div>
-                {errors.takerPays && (
-                  <p className="text-sm text-destructive">{errors.takerPays}</p>
-                )}
-                <p className="text-xs text-muted-foreground">Minimum: $10.00</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Submit Button */}
+      {!isExpanded ? (
+        <CardContent className="pt-6">
           <Button
-            type="submit"
+            onClick={() => setIsExpanded(true)}
             size="lg"
             className="w-full text-lg font-semibold"
           >
-            Go
+            Make a bet
           </Button>
-        </form>
-      </CardContent>
+        </CardContent>
+      ) : (
+        <>
+          <CardHeader>
+            <div className="flex items-center justify-between gap-4">
+              <CardTitle className="text-3xl font-bold text-balance">
+                Make a Bet
+              </CardTitle>
+              <Button
+                onClick={() => setIsExpanded(false)}
+                size="lg"
+                variant="outline"
+                className="text-lg font-semibold"
+              >
+                Nevermind
+              </Button>
+            </div>
+            <CardDescription className="text-muted-foreground">
+              Set up your bet and define the stakes for both parties
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Step 1: Bet Description */}
+              <div className="space-y-2">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-8 w-8 items-center justify-center rounded bg-muted text-sm font-semibold">
+                    1
+                  </div>
+                  <Label
+                    htmlFor="bet-description"
+                    className="text-lg font-semibold"
+                  >
+                    What's the bet?
+                  </Label>
+                </div>
+                <Textarea
+                  id="bet-description"
+                  placeholder="Describe the bet (e.g., Lakers will win the championship)"
+                  value={betDescription}
+                  onChange={(e) => setBetDescription(e.target.value)}
+                  className="min-h-[100px] resize-none"
+                  required
+                />
+              </div>
+
+              {/* Step 2: Payment Amounts */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-8 w-8 items-center justify-center rounded bg-muted text-sm font-semibold">
+                    2
+                  </div>
+                  <Label className="text-lg font-semibold">
+                    Set the stakes
+                  </Label>
+                </div>
+
+                <div className="grid gap-4 md:grid-cols-2">
+                  {/* Better Pays */}
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="better-pays"
+                      className="text-sm font-medium"
+                    >
+                      Better pays
+                    </Label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                        $
+                      </span>
+                      <Input
+                        id="better-pays"
+                        type="number"
+                        min="10"
+                        step="0.01"
+                        value={betterPays}
+                        onChange={(e) => handleBetterPaysChange(e.target.value)}
+                        className="pl-7"
+                        required
+                      />
+                    </div>
+                    {errors.betterPays && (
+                      <p className="text-sm text-destructive">
+                        {errors.betterPays}
+                      </p>
+                    )}
+                    <p className="text-xs text-muted-foreground">
+                      Minimum: $10.00
+                    </p>
+                  </div>
+
+                  {/* Taker Pays */}
+                  <div className="space-y-2">
+                    <Label htmlFor="taker-pays" className="text-sm font-medium">
+                      Taker pays
+                    </Label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                        $
+                      </span>
+                      <Input
+                        id="taker-pays"
+                        type="number"
+                        min="10"
+                        step="0.01"
+                        value={takerPays}
+                        onChange={(e) => handleTakerPaysChange(e.target.value)}
+                        className="pl-7"
+                        required
+                      />
+                    </div>
+                    {errors.takerPays && (
+                      <p className="text-sm text-destructive">
+                        {errors.takerPays}
+                      </p>
+                    )}
+                    <p className="text-xs text-muted-foreground">
+                      Minimum: $10.00
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Submit Button */}
+              <Button
+                type="submit"
+                size="lg"
+                className="w-full text-lg font-semibold"
+              >
+                Go
+              </Button>
+            </form>
+          </CardContent>
+        </>
+      )}
     </Card>
   );
 }
