@@ -66,18 +66,18 @@ function processExistingTweets(cancelToken) {
     children.forEach(child => child.remove())
     children.length = 0
     document.querySelectorAll("article[data-testid='tweet']").forEach(tweet => {
-        const helloDiv = document.createElement('div');
-        helloDiv.textContent = 'HELLO';
-        helloDiv.style.cssText = `
-          width: 100%;
-          text-align: center;
-          margin-top: 8px;
-          font-weight: bold;
-          color: red;
-        `;
+        const reactDiv = document.createElement('div');
+        // helloDiv.textContent = 'HELLO';
+        // helloDiv.style.cssText = `
+        //   width: 100%;
+        //   text-align: center;
+        //   margin-top: 8px;
+        //   font-weight: bold;
+        //   color: red;
+        // `;
 
         // Place it *after* the tweet, not inside
-        tweet.insertAdjacentElement('afterend', helloDiv);
+        tweet.insertAdjacentElement('afterend', reactDiv);
     });
 }
 
