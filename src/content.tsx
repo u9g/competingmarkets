@@ -33,7 +33,15 @@ function processExistingTweets(): void {
       const grokBtnClone = grokBtnEl.cloneNode(true) as HTMLElement; // <- tell TS it's an element
       parent.insertBefore(grokBtnClone, grokBtnEl);
 
-      grokBtnClone.querySelector("svg")?.replaceWith("Make a bet");
+      const textNode = document.createTextNode("Make a bet");
+      const span = document.createElement("span");
+      span.style.backgroundColor = "rgba(0, 255, 0, 0.3)";
+      span.style.padding = "2px 6px";
+      span.style.borderRadius = "4px";
+      span.style.color = "#000000";
+      span.style.fontWeight = "600";
+      span.appendChild(textNode);
+      grokBtnClone.querySelector("svg")?.replaceWith(span);
       // grok btn manip
 
       const reactDiv = document.createElement("div");
@@ -48,21 +56,46 @@ function processExistingTweets(): void {
       // Render React component into the div
       const root = createRoot(reactDiv);
 
+      // Variables to store the expand/collapse functions and state
+      let expandForm: (() => void) | null = null;
+      let collapseForm: (() => void) | null = null;
+      let isFormExpanded = false;
+
       // Create a function to re-render with updated hover state
       const renderWithHoverState = (isHovering: boolean) => {
-        root.render(<BettingForm isHovering={isHovering} />);
+        root.render(
+          <BettingForm
+            isHovering={isHovering}
+            onExpandRef={(expandFn, collapseFn, isExpanded) => {
+              expandForm = expandFn;
+              collapseForm = collapseFn;
+              isFormExpanded = isExpanded;
+            }}
+          />
+        );
+        // Update span color based on hover state
+        span.style.color = isHovering ? "#ffffff" : "#000000";
       };
 
       // Initial render with hover state false
       renderWithHoverState(false);
 
-      // Add hover listeners to the tweet element
-      tweet.addEventListener("mouseenter", () => {
-        renderWithHoverState(true);
+      // Add click listener to the "Make a bet" button to toggle form
+      grokBtnClone.addEventListener("click", () => {
+        if (isFormExpanded && collapseForm) {
+          collapseForm();
+        } else if (expandForm) {
+          expandForm();
+        }
       });
 
-      tweet.addEventListener("mouseleave", () => {
-        renderWithHoverState(false);
+      // Add hover listeners to the green box button
+      grokBtnClone.addEventListener("mouseenter", () => {
+        span.style.color = "#ffffff";
+      });
+
+      grokBtnClone.addEventListener("mouseleave", () => {
+        span.style.color = "#000000";
       });
     });
 }

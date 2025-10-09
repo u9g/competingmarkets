@@ -24,9 +24,10 @@ import { ShimmeringText } from "@/components/shimmering-text";
 
 interface BettingFormProps {
   isHovering: boolean;
+  onExpandRef?: (expandFn: () => void, collapseFn: () => void, isExpanded: boolean) => void;
 }
 
-export function BettingForm({ isHovering }: BettingFormProps) {
+export function BettingForm({ isHovering, onExpandRef }: BettingFormProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [isBetScreenHovered, setIsBetScreenHovered] = useState(false);
@@ -38,6 +39,15 @@ export function BettingForm({ isHovering }: BettingFormProps) {
     betterPays?: string;
     takerPays?: string;
   }>({});
+
+  // Expose expand/collapse functions to parent
+  if (onExpandRef) {
+    onExpandRef(
+      () => setIsExpanded(true),
+      () => setIsExpanded(false),
+      isExpanded
+    );
+  }
 
   // Combine tweet hover and bet screen hover
   const shouldShowButton = isHovering || isBetScreenHovered;
