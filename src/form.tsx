@@ -27,6 +27,7 @@ export function BettingForm() {
   const [betDescription, setBetDescription] = useState("");
   const [betterPays, setBetterPays] = useState("10");
   const [takerPays, setTakerPays] = useState("10");
+  const [prediction, setPrediction] = useState<"yes" | "no">("yes");
   const [errors, setErrors] = useState<{
     betterPays?: string;
     takerPays?: string;
@@ -91,7 +92,7 @@ export function BettingForm() {
             size="lg"
             className="w-full text-lg font-semibold"
           >
-            Make a bet
+            Offer a bet
           </Button>
         </CardContent>
       ) : (
@@ -212,6 +213,73 @@ export function BettingForm() {
                     <p className="text-xs text-muted-foreground">
                       Minimum: $10.00
                     </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Step 3: Prediction */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-8 w-8 items-center justify-center rounded bg-muted text-sm font-semibold">
+                    3
+                  </div>
+                  <Label className="text-lg font-semibold">
+                    Do you think it will happen?
+                  </Label>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between px-2">
+                    <span
+                      className={`text-sm font-medium transition-colors ${
+                        prediction === "no"
+                          ? "text-foreground"
+                          : "text-muted-foreground"
+                      }`}
+                    >
+                      No
+                    </span>
+                    <span
+                      className={`text-sm font-medium transition-colors ${
+                        prediction === "yes"
+                          ? "text-foreground"
+                          : "text-muted-foreground"
+                      }`}
+                    >
+                      Yes
+                    </span>
+                  </div>
+                  <div className="relative h-12 rounded-lg bg-muted p-1">
+                    <div
+                      className="absolute top-1 h-10 w-[calc(50%-4px)] rounded-md bg-primary transition-all duration-300 ease-out"
+                      style={{
+                        left: prediction === "yes" ? "calc(50% + 4px)" : "4px",
+                      }}
+                    />
+                    <div className="relative z-10 flex h-full">
+                      <button
+                        type="button"
+                        onClick={() => setPrediction("no")}
+                        className={`flex-1 rounded-md px-4 text-sm font-semibold transition-colors ${
+                          prediction === "no"
+                            ? "text-primary-foreground"
+                            : "text-muted-foreground hover:text-foreground"
+                        }`}
+                      >
+                        No
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setPrediction("yes")}
+                        className={`flex-1 rounded-md px-4 text-sm font-semibold transition-colors ${
+                          prediction === "yes"
+                            ? "text-primary-foreground"
+                            : "text-muted-foreground hover:text-foreground"
+                        }`}
+                      >
+                        Yes
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>

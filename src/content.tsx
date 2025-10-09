@@ -12,9 +12,11 @@ function processExistingTweets(): void {
         return;
       }
 
-      const cellInnerDiv = tweet.closest('div[data-testid="cellInnerDiv"]');
-      if ((cellInnerDiv?.parentElement?.children.length ?? 2) > 1) {
-        return;
+      if (document.URL !== "https://x.com/home") {
+        const cellInnerDiv = tweet.closest('div[data-testid="cellInnerDiv"]');
+        if ((cellInnerDiv?.parentElement?.children.length ?? 2) > 1) {
+          return;
+        }
       }
 
       const reactDiv = document.createElement("div");
