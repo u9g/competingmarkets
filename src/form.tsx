@@ -227,9 +227,10 @@ export function BettingForm() {
                   className="w-full max-w-md bg-zinc-900 ring-white/10"
                 >
                   <SlideToUnlockTrack>
-                    <SlideToUnlockText className="text-white">
+                    <SlideToUnlockText className="text-white !ml-0 absolute inset-0 flex items-center justify-center">
                       <ShimmeringText
-                        text="Slide to submit"
+                        text="Slide to offer"
+                        duration={0.3}
                         className="[--color:var(--color-zinc-400)] [--shimmering-color:var(--color-zinc-50)]"
                       />
                     </SlideToUnlockText>
