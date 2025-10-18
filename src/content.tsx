@@ -42,6 +42,11 @@ function processExistingTweets(): void {
       span.style.fontWeight = "600";
       span.appendChild(textNode);
       grokBtnClone.querySelector("svg")?.replaceWith(span);
+
+      // Initially hide the button
+      grokBtnClone.style.opacity = "0";
+      grokBtnClone.style.pointerEvents = "none";
+      grokBtnClone.style.transition = "opacity 0.2s ease-in-out";
       // grok btn manip
 
       const reactDiv = document.createElement("div");
@@ -73,8 +78,6 @@ function processExistingTweets(): void {
             }}
           />
         );
-        // Update span color based on hover state
-        span.style.color = isHovering ? "#ffffff" : "#000000";
       };
 
       // Initial render with hover state false
@@ -87,6 +90,19 @@ function processExistingTweets(): void {
         } else if (expandForm) {
           expandForm();
         }
+      });
+
+      // Add hover listeners to the tweet to show/hide the button
+      tweet.addEventListener("mouseenter", () => {
+        grokBtnClone.style.opacity = "1";
+        grokBtnClone.style.pointerEvents = "auto";
+        renderWithHoverState(true);
+      });
+
+      tweet.addEventListener("mouseleave", () => {
+        grokBtnClone.style.opacity = "0";
+        grokBtnClone.style.pointerEvents = "none";
+        renderWithHoverState(false);
       });
 
       // Add hover listeners to the green box button

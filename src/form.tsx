@@ -24,7 +24,11 @@ import { ShimmeringText } from "@/components/shimmering-text";
 
 interface BettingFormProps {
   isHovering: boolean;
-  onExpandRef?: (expandFn: () => void, collapseFn: () => void, isExpanded: boolean) => void;
+  onExpandRef?: (
+    expandFn: () => void,
+    collapseFn: () => void,
+    isExpanded: boolean
+  ) => void;
 }
 
 export function BettingForm({ isHovering, onExpandRef }: BettingFormProps) {
@@ -226,17 +230,19 @@ export function BettingForm({ isHovering, onExpandRef }: BettingFormProps) {
               </div>
             </div>
           </CardContent>
-        ) : !isExpanded && shouldShowButton ? (
-          <CardContent className="pt-6">
-            <Button
-              onClick={() => setIsExpanded(true)}
-              size="lg"
-              className="w-full text-lg font-semibold"
-            >
-              Offer a bet
-            </Button>
-          </CardContent>
-        ) : !isExpanded ? (
+        ) : !isExpanded &&
+          shouldShowButton ? null : //   // <CardContent className="pt-6">
+        // <CardContent
+        //   {/* intentionally empty */}
+        //   {/* <Button
+        //     onClick={() => setIsExpanded(true)}
+        //     size="lg"
+        //     className="w-full text-lg font-semibold"
+        //   >
+        //     Offer a bet
+        //   </Button> */}
+        // </CardContent>
+        !isExpanded ? (
           <div className="h-0" />
         ) : (
           <>
